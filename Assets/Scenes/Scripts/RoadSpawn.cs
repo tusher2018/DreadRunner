@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class RoadSpawner : MonoBehaviour
 {
+    public GameObject player;
     public GameObject roadPrefab;     // The road segment prefab to spawn
     public float roadLength = 10f;    // Length of each road segment
     public float spawnDistance = 30f; // Distance from the spawner at which new road segments are spawned
@@ -13,10 +14,12 @@ public class RoadSpawner : MonoBehaviour
     {
         // Initialize the spawn position based on the roadLength
         spawnZ = transform.position.z;
+        player = GameObject.FindWithTag("Player");
     }
 
     void Update()
     {
+        moveSpeed=player.GetComponent<PlayerController>().forwardSpeed;
         // Move the spawner forward at a constant speed
         transform.position += Vector3.forward * moveSpeed * Time.deltaTime;
 

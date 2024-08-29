@@ -1,9 +1,16 @@
 using UnityEngine;
+using System.Collections;
 
 public class GameManager : MonoBehaviour
 {
-    private bool isGameRunning = false;   
-    private bool isGameOver = false;      
+
+    public float StartTimeScale = 1f;          // Initial time scale (1x normal speed)
+             
+    public float timeToMakeSpeedDouble=600f;
+    
+    private float speedIncreaseRate;
+    public bool isGameRunning = false;   
+    public bool isGameOver = false;      
 
     public GameObject player;                 
     public GameObject barriersController;      
@@ -12,6 +19,11 @@ public class GameManager : MonoBehaviour
     public Color startColor = Color.red; 
     public Color endColor = Color.yellow;  
 
+
+public float forwardSpeed= 1.0f; 
+public float laneOffset =  2f;
+public float animSpeed = 1f;
+public float maxSpeed = 20f;  
 
     public Font titleFont;   
 
@@ -278,11 +290,6 @@ void OpenSettings()
 }
 
 
-
-
-
-
-
 void DrawSettingsDialog()
 {
     // Define styles for the dialog box and buttons
@@ -380,13 +387,31 @@ void ToggleMusic(bool enabled)
 }
 
 
+IEnumerator IncreaseSpeedOverTime(float duration, float targetSpeed)
+{
+    float initialSpeed = forwardSpeed;
+    float timeElapsed = 0f;
 
+    while (timeElapsed < duration)
+    {
+        timeElapsed += Time.deltaTime;
+        forwardSpeed = Mathf.Lerp(initialSpeed, targetSpeed, timeElapsed / duration);
+        yield return null;  // Wait until the next frame
+    }
 
-
-
+    forwardSpeed = targetSpeed;  // Ensure the speed is exactly 20 at the end
+}
 
     void Update()
     {
+        if(isGameRunning){
+            if(forwardSpeed>19){
+            if(Mathf.Exp(speedIncreaseRate * Time.time) * StartTimeScale < 1.2){
+             Time.timeScale = Mathf.Exp(speedIncreaseRate * Time.time) * StartTimeScale;
+             }
+             }
+        }
+
         if (isGameOver)
         {
            // game over hendelment
@@ -415,9 +440,17 @@ void ToggleMusic(bool enabled)
 
     void StartGame()
     {
+
+        // Set the initial time scale
+        Time.timeScale = StartTimeScale;
+        // Calculate the speed increase rate
+        speedIncreaseRate = Mathf.Log(2f) / timeToMakeSpeedDouble;
+
+
         isGameRunning = true;
         isGameOver = false;
-        Time.timeScale = 1; 
+        
+        
 
         if (player != null)
         {
@@ -426,9 +459,9 @@ void ToggleMusic(bool enabled)
             playerController = player.GetComponent<PlayerController>();
             if (playerController != null)
             {
-                playerController.forwardSpeed = 7.0f; 
-                playerController.laneOffset = 2.4f;
-                playerController.animSpeed = 1f;
+                playerController.forwardSpeed = forwardSpeed; 
+                playerController.laneOffset = laneOffset;
+                playerController.animSpeed = animSpeed;
             }
         }
 
@@ -441,6 +474,7 @@ void ToggleMusic(bool enabled)
         {
             roadsController.SetActive(true);
         }
+        StartCoroutine(IncreaseSpeedOverTime(timeToMakeSpeedDouble, maxSpeed));
     }
 
     void PauseGame()
@@ -476,13 +510,12 @@ void ToggleMusic(bool enabled)
     {
         isGameRunning = false;
         isGameOver = true;
-        
-
-       
+        Time.timeScale = 0; 
     }
 
     public void RestartGame()
     {
+        
         UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
     }
 }

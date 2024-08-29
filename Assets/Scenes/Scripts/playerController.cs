@@ -6,6 +6,10 @@ using System.Collections;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : MonoBehaviour
 {
+
+    public Font titleFont;   
+
+
     public float animSpeed = 1.5f;                // Animation playback speed
     public float forwardSpeed = 0f;               // Forward speed
     public float jumpPower = 2.0f;                // Jump power
@@ -13,6 +17,15 @@ public class PlayerController : MonoBehaviour
     public float useCurvesHeight = 0.5f;          // Height for curve correction
     public float laneChangeSpeed = 10.0f;         // Speed of lane changing
     public float laneOffset = 2.0f;               // Distance between each lane
+    
+    public AudioSource audioSource;              
+    public AudioClip runningSound;                
+    public AudioClip jumpingSound;                
+    public AudioClip hittingSound;  
+    public AudioClip goldPickingSound;  
+
+    public int goldCount = 0;  // Player's gold count
+    public int scoreAddOverTime=1;
 
     private CapsuleCollider col;
     private Rigidbody rb;
@@ -28,6 +41,7 @@ public class PlayerController : MonoBehaviour
 
     private Vector2 startTouchPosition, swipeDelta;
     private bool isSwiping = false;
+    
 
     static int locoState = Animator.StringToHash("Base Layer.Locomotion");
     static int jumpState = Animator.StringToHash("Base Layer.Jump");
@@ -36,6 +50,79 @@ public class PlayerController : MonoBehaviour
     static int slideUpState = Animator.StringToHash("Base Layer.SlideUp");
 
     public GameManager gameManager;
+
+
+
+
+    private int score = 0;     // Player's score
+
+
+
+
+    
+    public void AddScore(int points)
+    {
+        score += points;
+    }
+
+    // OnGUI is called for rendering and handling GUI events
+    void OnGUI()
+    {
+        if(gameManager.isGameRunning){
+        GUIStyle guiStyle = new GUIStyle();
+        guiStyle.fontSize = 24; // Set the font size
+        guiStyle.normal.textColor = Color.white; // Set the text color
+
+        // Draw the Score on the top left corner of the screen
+        GUI.Label(new Rect(10, 10, 200, 50), "Score: " + score.ToString(), guiStyle);
+
+        // Draw the Gold count below the Score
+        GUI.Label(new Rect(10, 50, 200, 50), "Gold: " + goldCount.ToString(), guiStyle);}
+
+
+
+        if(gameManager.isGameOver){
+    GUIStyle dialogStyle = new GUIStyle
+    {
+        font = titleFont,
+        alignment = TextAnchor.MiddleCenter,
+        
+        fontSize = Mathf.RoundToInt(Screen.height / 7f), // Font size for the title
+        normal = { textColor = Color.red }
+    };
+
+    // Center the dialog on the screen
+    float dialogWidth = Screen.width * 0.6f;
+    float dialogHeight = Screen.height / 1.3f;
+    float dialogX = (Screen.width - dialogWidth) / 2;
+    float dialogY = (Screen.height - dialogHeight) / 2; // Adjusted to center vertically
+
+    // Draw dialog background
+    GUI.Box(new Rect(dialogX, dialogY, dialogWidth, dialogHeight), "", GUI.skin.box);
+
+    // Draw dialog title
+    GUI.Label(new Rect(dialogX, dialogY + (dialogHeight / 6), dialogWidth, dialogHeight / 6), "Game Over", dialogStyle);
+
+   dialogStyle.fontSize = Mathf.RoundToInt(Screen.height / 10f);
+dialogStyle.normal.textColor=Color.white;
+
+    // Draw dialog title
+    GUI.Label(new Rect(dialogX, dialogY + (dialogHeight / 6)*2.5f, dialogWidth, dialogHeight / 6), "Score: "+score.ToString(), dialogStyle);
+      // Draw dialog title
+    GUI.Label(new Rect(dialogX, dialogY + (dialogHeight / 6)*4f, dialogWidth, dialogHeight / 6), "Gold: "+goldCount.ToString(), dialogStyle);
+
+        }
+    }
+
+
+
+
+
+
+
+
+
+
 
     void Start()
     {
@@ -48,6 +135,10 @@ public class PlayerController : MonoBehaviour
         orgColHeight = col.height;
         orgVectColCenter = col.center;
 
+        audioSource = GetComponent<AudioSource>();
+        audioSource.clip = runningSound;
+        audioSource.loop = true; 
+
         targetLanePosition = (currentLane - 1) * laneOffset;
     }
 
@@ -56,10 +147,20 @@ public class PlayerController : MonoBehaviour
         if (forwardSpeed > 0)
         {
             anim.SetFloat("Speed", 1); // Move forward
+
+            if (!audioSource.isPlaying) 
+            {
+                StartCoroutine(WaitAndPlayRunningSound());  
+                    
+            }
         }
         else
         {
             anim.SetFloat("Speed", 0); // Idle animation
+            if (audioSource.isPlaying) // Stop running sound when not moving
+            {
+                audioSource.Stop();
+            }
         }
 
         anim.SetFloat("Direction", 0); // No need for direction animation anymore
@@ -116,12 +217,25 @@ public class PlayerController : MonoBehaviour
                 }
 
                 anim.SetBool("Jump", false);
+                
             }
         }
 
         // Handle slide down, sliding, and slide up states
         HandleSlideStates();
+
+        AddScore(scoreAddOverTime);
     }
+
+
+
+
+public void AddGold(int amount)
+{
+    goldCount += amount;
+    PlaySound(goldPickingSound, false,1f);  
+}
+
 
     void HandleSlideStates()
     {
@@ -181,8 +295,14 @@ public class PlayerController : MonoBehaviour
             {
                 if (!anim.IsInTransition(0))
                 {
+                        if (audioSource.isPlaying && audioSource.clip == runningSound)
+                        {
+                            audioSource.Stop();
+                        }
                     rb.AddForce(Vector3.up * jumpPower, ForceMode.VelocityChange);
                     anim.SetBool("Jump", true);
+                    PlaySound(jumpingSound, false,1f);  
+                    StartCoroutine(WaitAndPlayRunningSound());  
                 }
             }
         }
@@ -202,6 +322,19 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+
+
+    IEnumerator WaitAndPlayRunningSound()
+    {
+        yield return new WaitForSeconds(1f);  // Wait for the jump sound to finish + 0.5 seconds delay
+
+        if (forwardSpeed > 0)  // Only play if still moving forward
+        {
+            PlaySound(runningSound, true, 0.2f);  // Play running sound at 30% volume
+        }
+    }
+
+
 
     void HandleTouchInput()
     {
@@ -279,11 +412,25 @@ public class PlayerController : MonoBehaviour
         col.center = orgVectColCenter;
     }
 
+    void PlaySound(AudioClip clip, bool loop, float volume)
+    {
+        audioSource.clip = clip;        // Set the audio clip
+        audioSource.loop = loop;        // Set loop mode
+        audioSource.volume = volume;    // Set the volume
+        audioSource.Play();             // Play the clip
+    }
+
+
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("killer"))
-        {
+        {   
+            if (audioSource.isPlaying && audioSource.clip == runningSound)
+            {
+                audioSource.Stop();
+            }
             anim.SetBool("Damage", true);
+            PlaySound(hittingSound, false,1f);  
             forwardSpeed = 0;
             StartCoroutine(WaitAndEndGame(1f));
         }

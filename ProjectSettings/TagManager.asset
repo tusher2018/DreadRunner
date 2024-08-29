@@ -8,6 +8,7 @@ TagManager:
   - eye
   - killer
   - gameManeger
+  - gold
   layers:
   - Default
   - TransparentFX

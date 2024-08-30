@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour
     public float StartTimeScale = 1f;          // Initial time scale (1x normal speed)
              
     public float timeToMakeSpeedDouble=600f;
+    public AudioSource audioSource;   
     
     private float speedIncreaseRate;
     public bool isGameRunning = false;   
@@ -405,6 +406,7 @@ IEnumerator IncreaseSpeedOverTime(float duration, float targetSpeed)
     void Update()
     {
         if(isGameRunning){
+            audioSource.volume = 1f;
             if(forwardSpeed>19){
             if(Mathf.Exp(speedIncreaseRate * Time.time) * StartTimeScale < 1.2){
              Time.timeScale = Mathf.Exp(speedIncreaseRate * Time.time) * StartTimeScale;
@@ -422,6 +424,8 @@ IEnumerator IncreaseSpeedOverTime(float duration, float targetSpeed)
     {
 
         if(!isGameRunning && !isGameOver){
+            audioSource.volume = 0.5f;
+            
             AppName();
             OthersButton();
         }
@@ -441,6 +445,8 @@ IEnumerator IncreaseSpeedOverTime(float duration, float targetSpeed)
     void StartGame()
     {
 
+
+
         // Set the initial time scale
         Time.timeScale = StartTimeScale;
         // Calculate the speed increase rate
@@ -450,8 +456,9 @@ IEnumerator IncreaseSpeedOverTime(float duration, float targetSpeed)
         isGameRunning = true;
         isGameOver = false;
         
-        
-
+    
+player.GetComponent<AudioSource>().volume=0.2f;  
+player.GetComponent<AudioSource>().Play();  
         if (player != null)
         {
             player.SetActive(true);
@@ -479,6 +486,7 @@ IEnumerator IncreaseSpeedOverTime(float duration, float targetSpeed)
 
     void PauseGame()
     {
+
         isGameRunning = false;
         Time.timeScale = 0; 
 
@@ -487,6 +495,7 @@ IEnumerator IncreaseSpeedOverTime(float duration, float targetSpeed)
             player.SetActive(true);
 
             playerController = player.GetComponent<PlayerController>();
+            player.GetComponent<AudioSource>().Stop();
             if (playerController != null)
             {
                 playerController.forwardSpeed = idleSpeed;
@@ -508,6 +517,7 @@ IEnumerator IncreaseSpeedOverTime(float duration, float targetSpeed)
 
     public void EndGame()
     {
+        audioSource.volume=0.5f;
         isGameRunning = false;
         isGameOver = true;
         Time.timeScale = 0; 

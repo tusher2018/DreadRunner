@@ -255,10 +255,17 @@ public void AddGold(int amount)
             if (Input.GetKey(KeyCode.S))
             {
                 anim.SetBool("Sliding", true);
+                if (audioSource.isPlaying && audioSource.clip == runningSound)
+                {
+                    audioSource.Stop();
+                }
+
+  
             }
             else
             {
                 anim.SetBool("Sliding", false);
+                audioSource.Play();
                 anim.SetBool("SlideUp", true);
             }
         }

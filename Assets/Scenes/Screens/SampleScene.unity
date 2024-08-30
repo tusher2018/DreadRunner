@@ -484,6 +484,7 @@ GameObject:
   m_Component:
   - component: {fileID: 983237506}
   - component: {fileID: 983237505}
+  - component: {fileID: 983237507}
   m_Layer: 0
   m_Name: GameMagneger
   m_TagString: gameManeger
@@ -504,7 +505,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   StartTimeScale: 1
-  timeToMakeSpeedDouble: 1
+  timeToMakeSpeedDouble: 120
+  audioSource: {fileID: 983237507}
   isGameRunning: 0
   isGameOver: 0
   player: {fileID: 368118145}
@@ -533,30 +535,13 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1045175572
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1045175575}
-  - component: {fileID: 1045175574}
-  m_Layer: 0
-  m_Name: background music
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!82 &1045175574
+--- !u!82 &983237507
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1045175572}
+  m_GameObject: {fileID: 983237504}
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
@@ -646,21 +631,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!4 &1045175575
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1045175572}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.2411097, y: -5.168217, z: 8.3691}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1311137141
 GameObject:
   m_ObjectHideFlags: 0
@@ -690,25 +660,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 718842cc76f1ce249b05cad3b0f0a796, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  smallBarrierPrefabs:
-  - {fileID: 2204154109629735833, guid: a0e6cf50af91d6e4396f890d2c6b047a, type: 3}
-  - {fileID: 5983176393544114421, guid: ec9729f75f52e6c4d8d7177869097059, type: 3}
-  - {fileID: 6004732060077426841, guid: c040b64de4d8bfe4ebe09358fa033a1c, type: 3}
-  - {fileID: 666369388591033547, guid: d7b3cbdec54b663429c9a1901c175891, type: 3}
-  - {fileID: 5160519167695958754, guid: 788530dd8b1a8fd4e8b48d587883ea35, type: 3}
-  - {fileID: 3271905190791916376, guid: ada50e585d8d604448b667604e91b526, type: 3}
-  fullBarrierPrefabs:
-  - {fileID: 5411847532329771953, guid: 4de44e02cacc5b14f823a64d73fa12dc, type: 3}
+  smallBarrierSettings:
+  - prefab: {fileID: 5983176393544114421, guid: ec9729f75f52e6c4d8d7177869097059, type: 3}
+    priority: 1
+  - prefab: {fileID: 6004732060077426841, guid: c040b64de4d8bfe4ebe09358fa033a1c, type: 3}
+    priority: 1
+  - prefab: {fileID: 666369388591033547, guid: d7b3cbdec54b663429c9a1901c175891, type: 3}
+    priority: 1
+  - prefab: {fileID: 5160519167695958754, guid: 788530dd8b1a8fd4e8b48d587883ea35, type: 3}
+    priority: 1
+  - prefab: {fileID: 3271905190791916376, guid: ada50e585d8d604448b667604e91b526, type: 3}
+    priority: 2
+  - prefab: {fileID: 2204154109629735833, guid: a0e6cf50af91d6e4396f890d2c6b047a, type: 3}
+    priority: 2
+  fullBarrierSettings:
+  - prefab: {fileID: 5411847532329771953, guid: 4de44e02cacc5b14f823a64d73fa12dc, type: 3}
+    priority: 3
+  - prefab: {fileID: 2204154109629735833, guid: a0e6cf50af91d6e4396f890d2c6b047a, type: 3}
+    priority: 3
   environmentPrefabs:
   - {fileID: 928661077623959835, guid: 4626ca3df613f1b47ae944d45bdf3c00, type: 3}
   - {fileID: 2932189599471515039, guid: e53865875690c5846adaa69332bf2577, type: 3}
   goldPrefab: {fileID: 1151554963077598938, guid: b4309044eaf436e43b0e239ef344f7eb, type: 3}
   playerTransform: {fileID: 368118150}
-  minSpawnDistance: 10
-  maxSpawnDistance: 30
+  initialMinDistance: 20
+  initialMaxDistance: 80
+  hardTimeMinDistance: 10
+  hardTimeMaxDistance: 50
   spawnDistanceFromPlayer: 100
   goldSpacing: 1.5
-  lanePositions: feffffff0000000002000000
+  initialSpawnRate: 0.5
+  maxSpawnRate: 1.5
+  difficultyRampUpTime: 60
+  hardModeTime: 120
 --- !u!4 &1311137143
 Transform:
   m_ObjectHideFlags: 0
@@ -844,6 +828,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -4398656773823867928, guid: dae479dc46e3a8041b04707f8b8457a0, type: 3}
+      propertyPath: jumpPower
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: -4398656773823867928, guid: dae479dc46e3a8041b04707f8b8457a0, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
@@ -875,6 +863,14 @@ PrefabInstance:
       propertyPath: goldPickingSound
       value: 
       objectReference: {fileID: 8300000, guid: 4e964e42301d88c4f94becc40d7ac3c5, type: 3}
+    - target: {fileID: 6756415858229760054, guid: dae479dc46e3a8041b04707f8b8457a0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7738675272944039285, guid: dae479dc46e3a8041b04707f8b8457a0, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8658039146759729010, guid: dae479dc46e3a8041b04707f8b8457a0, type: 3}
       propertyPath: m_Mass
       value: 100
@@ -929,6 +925,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8658039146765242494, guid: dae479dc46e3a8041b04707f8b8457a0, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8658039146769010610, guid: dae479dc46e3a8041b04707f8b8457a0, type: 3}
+      propertyPath: m_IsTrigger
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1073,4 +1073,3 @@ SceneRoots:
   - {fileID: 983237506}
   - {fileID: 2895899831318007900}
   - {fileID: 7066916105317000228}
-  - {fileID: 1045175575}

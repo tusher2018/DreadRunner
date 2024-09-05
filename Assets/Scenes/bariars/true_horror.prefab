@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3058592539696663817}
   - component: {fileID: 7096247388554176586}
   - component: {fileID: 3065096849895033834}
+  - component: {fileID: 3825977048799845823}
   m_Layer: 0
   m_Name: true_horror
   m_TagString: Untagged
@@ -68,10 +69,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3f73222e4ad0104a901df54b194fb6a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 4
+  speed: 10
   grabDistance: 1
-  runStartDistance: 13
-  lookSpeed: 2
+  runStartDistance: 30
+  lookSpeed: 3
   tolerance: 0.1
   grabColliders:
   - {fileID: 1173372204862898872}
@@ -94,12 +95,26 @@ CapsuleCollider:
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.1
+  m_Radius: 0.2
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 1, z: 0}
+--- !u!114 &3825977048799845823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2204154109629735833}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff2b1ddab36b14048ba60abdb253bbd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  destroyDistance: 500
 --- !u!1001 &3994035910254186436
 PrefabInstance:
   m_ObjectHideFlags: 0

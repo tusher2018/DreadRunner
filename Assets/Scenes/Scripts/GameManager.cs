@@ -14,7 +14,7 @@ public class GameManager : MonoBehaviour
     public bool isGameOver = false;      
 
     public GameObject player;                 
-    public GameObject barriersController;      
+        
     public GameObject roadsController;         
     public float idleSpeed = 0f;   
     public Color startColor = Color.red; 
@@ -407,11 +407,11 @@ IEnumerator IncreaseSpeedOverTime(float duration, float targetSpeed)
     {
         if(isGameRunning){
             audioSource.volume = 1f;
-            if(forwardSpeed>19){
-            if(Mathf.Exp(speedIncreaseRate * Time.time) * StartTimeScale < 1.2){
+            
+            if(Mathf.Exp(speedIncreaseRate * Time.time) * StartTimeScale < 1.3){
              Time.timeScale = Mathf.Exp(speedIncreaseRate * Time.time) * StartTimeScale;
              }
-             }
+            
         }
 
         if (isGameOver)
@@ -472,10 +472,7 @@ player.GetComponent<AudioSource>().Play();
             }
         }
 
-        if (barriersController != null)
-        {
-            barriersController.SetActive(true);
-        }
+    
 
         if (roadsController != null)
         {
@@ -504,10 +501,7 @@ player.GetComponent<AudioSource>().Play();
             }
         }
 
-        if (barriersController != null)
-        {
-            barriersController.SetActive(false);
-        }
+    
 
         if (roadsController != null)
         {

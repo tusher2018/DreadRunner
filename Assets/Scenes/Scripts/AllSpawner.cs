@@ -18,7 +18,10 @@ public class EnvironmentObject
 [System.Serializable]
 public class RoadEnvironment
 {
-    public GameObject roadPrefab;                        // The road prefab
+    
+    public GameObject roadPrefab;                         // The road prefab
+    public float roadLength;  
+    public List<EnvironmentObject> fullEnvironments;
     public List<EnvironmentObject> leftSideEnvironments; // List of left-side environment objects
     public List<EnvironmentObject> rightSideEnvironments;// List of right-side environment objects
 }
@@ -33,7 +36,7 @@ public class AllSpawner : MonoBehaviour
 
     public Transform playerTransform;                   // Player's transform
 
-    public float roadLength = 72f;                      // Length of each road segment
+                        // Length of each road segment
     public float spawnDistanceFromPlayer = 200f;        // Distance ahead of the player to spawn objects
     public float goldSpacing = 1.5f;                    // Spacing between gold objects
 
@@ -106,7 +109,7 @@ public float maxSpawnDistanceForEnvironment = 400.0f;
 
         // Spawn the current road prefab
         Instantiate(roadEnvironments[currentMapIndex].roadPrefab, spawnPosition, Quaternion.identity);
-        spawnZ += roadLength;
+        spawnZ += roadEnvironments[currentMapIndex].roadLength;
     }
 
     void SwitchToNextMap()
@@ -121,8 +124,8 @@ public float maxSpawnDistanceForEnvironment = 400.0f;
 
     void SpawnBarrier()
     {
-        float spawnChance = GetAdjustedSpawnRate();
-
+        // float spawnChance = GetAdjustedSpawnRate();
+        float spawnChance = Random.value;
     
             SpawnEnvironment();
         
@@ -157,42 +160,65 @@ public float maxSpawnDistanceForEnvironment = 400.0f;
 
 void SpawnEnvironment()
 {
+    float spawnChance = Random.value;  // Random value between 0.0 and 1.0
+
     RoadEnvironment currentEnvironment = roadEnvironments[currentMapIndex];
 
-    // Spawn the next left-side environment sequentially
-    if (currentEnvironment.leftSideEnvironments.Count > 0)
-    {
-        int leftIndex = currentMapIndex % currentEnvironment.leftSideEnvironments.Count;
-        EnvironmentObject leftEnvironment = currentEnvironment.leftSideEnvironments[leftIndex];
+    if (currentEnvironment.fullEnvironments.Count > 0 && spawnChance <= 0.5f){
 
-        Vector3 spawnPosition = lastLeftEnvironmentPosition + new Vector3(0, 0, leftEnvironment.spawnDistance);
+        int Index = currentMapIndex % currentEnvironment.fullEnvironments.Count;
+        EnvironmentObject Environment = currentEnvironment.fullEnvironments[Index];
+        Vector3 spawnPosition;
+        if(lastRightEnvironmentPosition.z>lastLeftEnvironmentPosition.z){
+         spawnPosition= lastRightEnvironmentPosition + new Vector3(0, 0, Environment.spawnDistance);
+         }else{
+            spawnPosition= lastLeftEnvironmentPosition + new Vector3(0, 0, Environment.spawnDistance);
+         }
 
         // Check distance from player
         if (Vector3.Distance(playerTransform.position, spawnPosition) <= maxSpawnDistanceForEnvironment)
         {
-            Instantiate(leftEnvironment.prefab, spawnPosition, Quaternion.identity);
+            Instantiate(Environment.prefab, spawnPosition, Quaternion.identity);
+            lastRightEnvironmentPosition = spawnPosition;  // Update the last position for the right side
             lastLeftEnvironmentPosition = spawnPosition;  // Update the last position for the left side
         }
-    }
 
-    // Spawn the next right-side environment sequentially
-    if (currentEnvironment.rightSideEnvironments.Count > 0)
-    {
-        int rightIndex = currentMapIndex % currentEnvironment.rightSideEnvironments.Count;
-        EnvironmentObject rightEnvironment = currentEnvironment.rightSideEnvironments[rightIndex];
-
-        Vector3 spawnPosition = lastRightEnvironmentPosition + new Vector3(0, 0, rightEnvironment.spawnDistance);
-
-        // Check distance from player
-        if (Vector3.Distance(playerTransform.position, spawnPosition) <= maxSpawnDistanceForEnvironment)
+    }else
+{
+        // Spawn the next left-side environment sequentially
+        if (currentEnvironment.leftSideEnvironments.Count > 0)
         {
-            Instantiate(rightEnvironment.prefab, spawnPosition, Quaternion.identity);
-            lastRightEnvironmentPosition = spawnPosition;  // Update the last position for the right side
+            int leftIndex = currentMapIndex % currentEnvironment.leftSideEnvironments.Count;
+            EnvironmentObject leftEnvironment = currentEnvironment.leftSideEnvironments[leftIndex];
+
+            Vector3 spawnPosition = lastLeftEnvironmentPosition + new Vector3(0, 0, leftEnvironment.spawnDistance);
+
+            // Check distance from player
+            if (Vector3.Distance(playerTransform.position, spawnPosition) <= maxSpawnDistanceForEnvironment)
+            {
+                Instantiate(leftEnvironment.prefab, spawnPosition, Quaternion.identity);
+                lastLeftEnvironmentPosition = spawnPosition;  // Update the last position for the left side
+            }
+        }
+
+        // Spawn the next right-side environment sequentially
+        if (currentEnvironment.rightSideEnvironments.Count > 0)
+        {
+            int rightIndex = currentMapIndex % currentEnvironment.rightSideEnvironments.Count;
+            EnvironmentObject rightEnvironment = currentEnvironment.rightSideEnvironments[rightIndex];
+
+            Vector3 spawnPosition = lastRightEnvironmentPosition + new Vector3(0, 0, rightEnvironment.spawnDistance);
+
+            // Check distance from player
+            if (Vector3.Distance(playerTransform.position, spawnPosition) <= maxSpawnDistanceForEnvironment)
+            {
+                Instantiate(rightEnvironment.prefab, spawnPosition, Quaternion.identity);
+                lastRightEnvironmentPosition = spawnPosition;  // Update the last position for the right side
+            }
         }
     }
-
     // Update to the next environment for the next call
-    currentMapIndex = (currentMapIndex + 1) % roadEnvironments.Count;
+    // currentMapIndex = (currentMapIndex + 1) % roadEnvironments.Count;
 }
 
 

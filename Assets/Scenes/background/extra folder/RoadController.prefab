@@ -1,0 +1,100 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8995108213070841592
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3429535382386889587}
+  - component: {fileID: 6311327945581307359}
+  m_Layer: 0
+  m_Name: RoadController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &3429535382386889587
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8995108213070841592}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 72}
+  m_LocalScale: {x: 4, y: 4, z: 0.1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6311327945581307359
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8995108213070841592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 87a213e34688cfb4aac44bacef81ce72, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  smallBarrierSettings:
+  - prefab: {fileID: 5983176393544114421, guid: ec9729f75f52e6c4d8d7177869097059, type: 3}
+    priority: 1
+  - prefab: {fileID: 666369388591033547, guid: d7b3cbdec54b663429c9a1901c175891, type: 3}
+    priority: 1
+  - prefab: {fileID: 2204154109629735833, guid: a0e6cf50af91d6e4396f890d2c6b047a, type: 3}
+    priority: 1
+  - prefab: {fileID: 2204154109629735833, guid: a0e6cf50af91d6e4396f890d2c6b047a, type: 3}
+    priority: 1
+  fullBarrierSettings:
+  - prefab: {fileID: 5411847532329771953, guid: 4de44e02cacc5b14f823a64d73fa12dc, type: 3}
+    priority: 1
+  - prefab: {fileID: 2204154109629735833, guid: a0e6cf50af91d6e4396f890d2c6b047a, type: 3}
+    priority: 1
+  roadEnvironments:
+  - roadPrefab: {fileID: 5057298282977531682, guid: 253999770ef073245b8ed776520b63db, type: 3}
+    roadLength: 240
+    fullEnvironments:
+    - prefab: {fileID: 2488171577564572196, guid: f2c4dfc49645d9d489730f361034c4ad, type: 3}
+      spawnDistance: 450
+    leftSideEnvironments:
+    - prefab: {fileID: 5944650506821303626, guid: a0c2ed9950f2c9541be3cb158bd3dafd, type: 3}
+      spawnDistance: 150
+    - prefab: {fileID: 7677795258928723722, guid: 39757df722242c642bfa5bb945468ab8, type: 3}
+      spawnDistance: 150
+    rightSideEnvironments:
+    - prefab: {fileID: 7101937364091243111, guid: b25d198c9f8f0bf46adf33c64e2021a5, type: 3}
+      spawnDistance: 150
+    - prefab: {fileID: 2820498485946077595, guid: c9c18d6d86204f245b100d3ca84311db, type: 3}
+      spawnDistance: 150
+  - roadPrefab: {fileID: 2506850311065100939, guid: 98efcc97ae027a4469b5826efec076d5, type: 3}
+    roadLength: 240
+    fullEnvironments: []
+    leftSideEnvironments:
+    - prefab: {fileID: 928661077623959835, guid: 4626ca3df613f1b47ae944d45bdf3c00, type: 3}
+      spawnDistance: 20
+    rightSideEnvironments:
+    - prefab: {fileID: 2932189599471515039, guid: e53865875690c5846adaa69332bf2577, type: 3}
+      spawnDistance: 0
+  goldPrefab: {fileID: 1151554963077598938, guid: b4309044eaf436e43b0e239ef344f7eb, type: 3}
+  gatePrefab: {fileID: 2286711543878042139, guid: 5289da6453c529c4d805d2b487bc4ebf, type: 3}
+  playerTransform: {fileID: 0}
+  spawnDistanceFromPlayer: 500
+  goldSpacing: 1.5
+  initialMinDistance: 30
+  initialMaxDistance: 80
+  initialSpawnRate: 0.5
+  hardTimeMinDistance: 10
+  hardTimeMaxDistance: 60
+  maxSpawnRate: 1
+  difficultyRampUpTime: 120
+  hardModeTime: 60
+  mapSwitchInterval: 120
+  maxSpawnDistanceForEnvironment: 400

@@ -408,9 +408,9 @@ IEnumerator IncreaseSpeedOverTime(float duration, float targetSpeed)
         if(isGameRunning){
             audioSource.volume = 1f;
             
-            if(Mathf.Exp(speedIncreaseRate * Time.time) * StartTimeScale < 1.3){
-             Time.timeScale = Mathf.Exp(speedIncreaseRate * Time.time) * StartTimeScale;
-             }
+            // if(Mathf.Exp(speedIncreaseRate * Time.time) * StartTimeScale < 1.3){
+            //  Time.timeScale = Mathf.Exp(speedIncreaseRate * Time.time) * StartTimeScale;
+            //  }
             
         }
 
@@ -446,7 +446,7 @@ IEnumerator IncreaseSpeedOverTime(float duration, float targetSpeed)
     {
 
 
-
+player = GameObject.FindGameObjectWithTag("Player");
         // Set the initial time scale
         Time.timeScale = StartTimeScale;
         // Calculate the speed increase rate
@@ -477,6 +477,7 @@ player.GetComponent<AudioSource>().Play();
         if (roadsController != null)
         {
             roadsController.SetActive(true);
+            roadsController.GetComponent<AllSpawner>().laneOffset=laneOffset;
         }
         StartCoroutine(IncreaseSpeedOverTime(timeToMakeSpeedDouble, maxSpeed));
     }

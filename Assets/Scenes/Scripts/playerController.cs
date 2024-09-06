@@ -192,11 +192,8 @@ dialogStyle.normal.textColor=Color.white;
             {
                 if (useCurves)
                 {
-                    float jumpHeight = anim.GetFloat("JumpHeight");
-                    float gravityControl = anim.GetFloat("GravityControl");
-
-                    if (gravityControl > 0)
-                        rb.useGravity = false;
+                   
+                   
 
                     Ray ray = new Ray(transform.position + Vector3.up, -Vector3.up);
                     RaycastHit hitInfo;
@@ -205,9 +202,12 @@ dialogStyle.normal.textColor=Color.white;
                     {
                         if (hitInfo.distance > useCurvesHeight)
                         {
-                            col.height = orgColHeight - jumpHeight;
-                            float adjCenterY = orgVectColCenter.y + jumpHeight;
-                            col.center = new Vector3(0, adjCenterY, 0);
+
+                               col.height = orgColHeight / 2;
+                                col.center = new Vector3(0, orgVectColCenter.y, 0);
+                            // col.height = orgColHeight - jumpHeight;
+                            // float adjCenterY = orgVectColCenter.y + jumpHeight;
+                            // col.center = new Vector3(0, adjCenterY, 0);
                         }
                         else
                         {
@@ -216,7 +216,7 @@ dialogStyle.normal.textColor=Color.white;
                     }
                 }
 
-                anim.SetBool("Jump", false);
+                
                 
             }
         }
@@ -225,6 +225,12 @@ dialogStyle.normal.textColor=Color.white;
         HandleSlideStates();
 
         AddScore(scoreAddOverTime);
+        
+        if (rb.velocity.y < 0)
+        {
+            rb.velocity += Vector3.up * Physics.gravity.y * (2 - 1) * Time.deltaTime;
+        }
+
     }
 
 
@@ -307,6 +313,10 @@ public void AddGold(int amount)
                             audioSource.Stop();
                         }
                     rb.AddForce(Vector3.up * jumpPower, ForceMode.VelocityChange);
+                      
+  
+        
+
                     anim.SetBool("Jump", true);
                     PlaySound(jumpingSound, false,1f);  
                     StartCoroutine(WaitAndPlayRunningSound());  
@@ -430,6 +440,7 @@ public void AddGold(int amount)
 
     void OnCollisionEnter(Collision collision)
     {
+
         if (collision.gameObject.CompareTag("killer"))
         {   
             if (audioSource.isPlaying && audioSource.clip == runningSound)
@@ -441,6 +452,9 @@ public void AddGold(int amount)
             forwardSpeed = 0;
             StartCoroutine(WaitAndEndGame(1f));
         }
+
+        anim.SetBool("Jump", false);
+        
     }
 
     IEnumerator WaitAndEndGame(float waitTime)

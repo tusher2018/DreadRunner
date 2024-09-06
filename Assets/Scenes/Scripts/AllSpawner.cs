@@ -54,7 +54,8 @@ public class AllSpawner : MonoBehaviour
     private float lastSpawnZ;                           // Last spawn position
     private float spawnZ;                               // Next road segment spawn position
     private float elapsedTime = 0f;                     // Time elapsed since game start
-    private int[] lanePositions = { -2, 0, 2 };         // Lane positions for barriers
+    public int[] lanePositions = { -2, 0, 2 };         // Lane positions for barriers
+    public float laneOffset=2;
     private float moveSpeed = 5f;                       // Spawner's move speed
     private int currentMapIndex = 0;                    // Track the current map index
     private float lastMapSwitchTime = 0f;               // Last time a map switch occurred
@@ -69,9 +70,10 @@ public float maxSpawnDistanceForEnvironment = 400.0f;
 
     void Start()
     {
+        playerTransform = GameObject.FindWithTag("Player").transform;
         lastSpawnZ = playerTransform.position.z - initialMaxDistance;
         spawnZ = transform.position.z;
-        playerTransform = GameObject.FindWithTag("Player").transform;
+        
     }
 
     void Update()
@@ -124,13 +126,13 @@ public float maxSpawnDistanceForEnvironment = 400.0f;
 
     void SpawnBarrier()
     {
-        // float spawnChance = GetAdjustedSpawnRate();
-        float spawnChance = Random.value;
+        float spawnChance = GetAdjustedSpawnRate();
+        // float spawnChance = Random.value;
     
             SpawnEnvironment();
         
         
-        if (Random.value < 0.7f * spawnChance)
+        if (Random.value < 0.5f )
         {
             SpawnFullBarrier();
         }
@@ -139,7 +141,7 @@ public float maxSpawnDistanceForEnvironment = 400.0f;
             SpawnSmallBarrier();
         }
 
-        if (Random.value < 0.3f * spawnChance) // 30% chance to spawn gold
+        if (Random.value < 0.4f * spawnChance) // 40% chance to spawn gold
         {
             SpawnGoldCluster();
         }
@@ -236,7 +238,7 @@ void SpawnEnvironment()
     {
         BarrierSettings selectedBarrier = SelectBarrier(smallBarrierSettings);
         int laneIndex = Random.Range(0, lanePositions.Length);
-        float lanePosition = lanePositions[laneIndex];
+        float lanePosition = lanePositions[laneIndex]*(laneOffset/2);
         Vector3 spawnPosition = new Vector3(lanePosition, 0, playerTransform.position.z + spawnDistanceFromPlayer);
 
         Instantiate(selectedBarrier.prefab, spawnPosition, Quaternion.identity);
@@ -269,7 +271,7 @@ void SpawnEnvironment()
     {
         int goldCount = Random.Range(10, 21); 
         int laneIndex = Random.Range(0, lanePositions.Length); 
-        float lanePosition = lanePositions[laneIndex];
+        float lanePosition = lanePositions[laneIndex]*(laneOffset/2);
 
         for (int i = 0; i < goldCount; i++)
         {

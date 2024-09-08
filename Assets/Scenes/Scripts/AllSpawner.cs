@@ -78,6 +78,13 @@ public float maxSpawnDistanceForEnvironment = 400.0f;
 
     void Update()
     {
+        if(playerTransform== null){
+            GameObject playerObject=GameObject.FindWithTag("Player");
+            if(playerObject==null){return;}
+                  playerTransform = playerObject.transform;
+        lastSpawnZ = playerTransform.position.z - initialMaxDistance;
+        spawnZ = transform.position.z;
+        }
         elapsedTime += Time.deltaTime;
 
         // Move the spawner forward at the player's speed

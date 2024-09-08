@@ -10,13 +10,13 @@ public class PlayerController : MonoBehaviour
     public Font titleFont;   
 
 
-    public float animSpeed = 1.5f;                // Animation playback speed
+    public float animSpeed = 1f;                // Animation playback speed
     public float forwardSpeed = 0f;               // Forward speed
-    public float jumpPower = 2.0f;                // Jump power
+    public float jumpPower = 6.0f;                // Jump power
     public bool useCurves = true;                 // Whether to use Mecanim curves for animation adjustment
     public float useCurvesHeight = 0.5f;          // Height for curve correction
     public float laneChangeSpeed = 10.0f;         // Speed of lane changing
-    public float laneOffset = 2.0f;               // Distance between each lane
+    public float laneOffset = 0.0f;               // Distance between each lane
     
     public AudioSource audioSource;              
     public AudioClip runningSound;                
@@ -70,14 +70,18 @@ public class PlayerController : MonoBehaviour
     {
         if(gameManager.isGameRunning){
         GUIStyle guiStyle = new GUIStyle();
-        guiStyle.fontSize = 24; // Set the font size
+        guiStyle.fontSize = Screen.width/24;
         guiStyle.normal.textColor = Color.white; // Set the text color
+        
+        float textHeight = Screen.height / 10; // Height for each text line
+        float textSpacing = Screen.height / 20; // Spacing between text lines
+     
 
         // Draw the Score on the top left corner of the screen
-        GUI.Label(new Rect(10, 10, 200, 50), "Score: " + score.ToString(), guiStyle);
-
+        GUI.Label(new Rect(10, 0, 200, 50), "Score: " + score.ToString(), guiStyle);
+float contentStartY =(Screen.height / 10);
         // Draw the Gold count below the Score
-        GUI.Label(new Rect(10, 50, 200, 50), "Gold: " + goldCount.ToString(), guiStyle);}
+        GUI.Label(new Rect(10, contentStartY, 200, 50), "Gold: " + goldCount.ToString(), guiStyle);}
 
 
 
@@ -203,8 +207,8 @@ dialogStyle.normal.textColor=Color.white;
                         if (hitInfo.distance > useCurvesHeight)
                         {
 
-                               col.height = orgColHeight / 2;
-                                col.center = new Vector3(0, orgVectColCenter.y, 0);
+                            
+                                
                             // col.height = orgColHeight - jumpHeight;
                             // float adjCenterY = orgVectColCenter.y + jumpHeight;
                             // col.center = new Vector3(0, adjCenterY, 0);

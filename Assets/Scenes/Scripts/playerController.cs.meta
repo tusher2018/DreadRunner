@@ -3,7 +3,14 @@ guid: 1b861ea59ce4bbe4b8bd9e1d4cf01a1d
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - titleFont: {fileID: 12800000, guid: 6130b9e991d2b3e40a1ca4142bdd8578, type: 3}
+  - audioSource: {instanceID: 0}
+  - runningSound: {fileID: 8300000, guid: 77f45672abc1f8d45b8ab8aada4dc649, type: 3}
+  - jumpingSound: {fileID: 8300000, guid: 1d2f73597c980ae439325061c5985f42, type: 3}
+  - hittingSound: {fileID: 8300000, guid: ebda073df49afd841a0680ac12b2d465, type: 3}
+  - goldPickingSound: {fileID: 8300000, guid: 4e964e42301d88c4f94becc40d7ac3c5, type: 3}
+  - gameManager: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

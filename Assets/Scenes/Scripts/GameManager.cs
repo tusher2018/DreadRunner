@@ -27,13 +27,14 @@ public class GameManager : MonoBehaviour
 
     public Font titleFont;   
 
-    private string titleText = "Z O M B I E   L A N D";
+    private string titleText = "D r e a d R u n n e r";
     private int fontSize; 
     private bool soundEnabled = true; 
     private bool musicEnabled = true; 
     private bool showSettingsDialog = false;
     private bool showMenuDialog = false;
     private bool showProfileDialog = false;
+    private bool commingSoon=false;
 
     private PlayerController playerController; 
     
@@ -362,12 +363,18 @@ void changePlayer(int newIndex)
 
     void OpenMaps()
     {
-        // Implement maps logic here
+            commingSoon=true;
+    showSettingsDialog = false;
+    showMenuDialog=false;
+    showProfileDialog=false;
     }
 
     void OpenStore()
     {
-        // Implement store logic here
+        commingSoon=true;
+    showSettingsDialog = false;
+    showMenuDialog=false;
+    showProfileDialog=false;
     }
 
     void OpenSettings()
@@ -377,14 +384,24 @@ void changePlayer(int newIndex)
     showProfileDialog=false;
     }
 
-int maxCoins=100;
-int longestRun=1000;
-int maxSurviveTime=10;
-int highestScore=1000;
-int totalCoin=1000;
+int maxCoins=0;
+int longestRun=0;
+int maxSurviveTime=0;
+int highestScore=0;
+int totalCoin=0;
 
     void DrawProfileDialog()
     {
+
+
+int savedMaxCoins = PlayerPrefs.GetInt("MaxCoins", 0); // Retrieve saved maxCoins (default 0 if not set)
+int savedLongestRun = PlayerPrefs.GetInt("LongestRun", 0);
+int savedMaxSurviveTime = PlayerPrefs.GetInt("MaxSurviveTime", 0);
+int savedHighestScore = PlayerPrefs.GetInt("HighestScore", 0);
+int savedtotalCoin = PlayerPrefs.GetInt("TotalCoin", 0);
+
+
+
         // Define styles for the dialog box and text labels
         GUIStyle dialogStyle = new GUIStyle
         {
@@ -423,15 +440,15 @@ int totalCoin=1000;
 
         // Display profile statistics
         
-        GUI.Label(new Rect(dialogX + (dialogWidth - textWidth) / 2, contentStartY, textWidth, textHeight), "Max Coins Collected: " + maxCoins, textStyle);
+        GUI.Label(new Rect(dialogX + (dialogWidth - textWidth) / 2, contentStartY, textWidth, textHeight), "Max Coins Collected: " + savedMaxCoins, textStyle);
         contentStartY += textHeight + textSpacing/2;
-        GUI.Label(new Rect(dialogX + (dialogWidth - textWidth) / 2, contentStartY, textWidth, textHeight), "Longest Run: " + longestRun + " meters", textStyle);
+        GUI.Label(new Rect(dialogX + (dialogWidth - textWidth) / 2, contentStartY, textWidth, textHeight), "Longest Run: " + savedLongestRun + " meters", textStyle);
         contentStartY += textHeight + textSpacing/2;
-        GUI.Label(new Rect(dialogX + (dialogWidth - textWidth) / 2, contentStartY, textWidth, textHeight), "Max Survive Time: " + maxSurviveTime + " seconds", textStyle);
+        GUI.Label(new Rect(dialogX + (dialogWidth - textWidth) / 2, contentStartY, textWidth, textHeight), "Max Survive Time: " + savedMaxSurviveTime + " seconds", textStyle);
         contentStartY += textHeight + textSpacing/2;
-        GUI.Label(new Rect(dialogX + (dialogWidth - textWidth) / 2, contentStartY, textWidth, textHeight), "Highest Score: " + highestScore, textStyle);
+        GUI.Label(new Rect(dialogX + (dialogWidth - textWidth) / 2, contentStartY, textWidth, textHeight), "Highest Score: " + savedHighestScore, textStyle);
         contentStartY += textHeight + textSpacing/2;
-         GUI.Label(new Rect(dialogX + (dialogWidth - textWidth) / 2, contentStartY, textWidth, textHeight), "Total Coin: " + totalCoin, textStyle);
+         GUI.Label(new Rect(dialogX + (dialogWidth - textWidth) / 2, contentStartY, textWidth, textHeight), "Total Coin: " + savedtotalCoin, textStyle);
         contentStartY += textHeight + textSpacing;
          
         if ( GUI.Button(new Rect(dialogX + (dialogWidth - textWidth) / 2, contentStartY, textWidth, textHeight), "Close"))
@@ -441,6 +458,69 @@ int totalCoin=1000;
 
         // Additional text statistics can be added in a similar way
     }
+
+
+
+
+     void DrawCommingDialog()
+    {
+        // Define styles for the dialog box and buttons
+        GUIStyle dialogStyle = new GUIStyle
+        {
+            // font = titleFont,
+            alignment = TextAnchor.MiddleCenter,
+            fontSize = Mathf.RoundToInt(Screen.height / 10f), // Font size for the title
+            normal = { textColor = Color.white }
+        };
+
+        GUIStyle buttonStyle = new GUIStyle(GUI.skin.button)
+        {
+            // font = titleFont,
+            alignment = TextAnchor.MiddleCenter,
+            normal = { background = MakeTex(2, 2, Color.grey) },
+            active = { background = MakeTex(2, 2, Color.grey) }
+        };
+
+        // Center the dialog on the screen
+        float dialogWidth = Screen.width * 0.6f;
+        float dialogHeight = Screen.height /3f;
+        float dialogX = (Screen.width - dialogWidth) / 2;
+        float dialogY = (Screen.height - dialogHeight) / 2; // Adjusted to center vertically
+
+        // Draw dialog background
+        GUI.Box(new Rect(dialogX, dialogY, dialogWidth, dialogHeight), "", GUI.skin.box);
+
+        // Draw dialog title
+        GUI.Label(new Rect(dialogX, dialogY + (dialogHeight /6), dialogWidth, dialogHeight / 6), "Comming Soon", dialogStyle);
+
+        // Button dimensions and positions relative to the dialog
+        float buttonWidth = dialogWidth * 0.8f;
+        float buttonHeight = dialogHeight / 3; // Height of the button area
+        float buttonSpacing = dialogHeight / 12; // Spacing between buttons
+        float contentHeight = dialogHeight - (dialogHeight / 6) - (buttonSpacing * 4); // Space for title, padding, and buttons
+        
+        
+        float buttonStartY = dialogY  + (contentHeight - buttonHeight) / 2; // Center buttons vertically
+
+        // Calculate font size based on buttonHeight
+        buttonStyle.fontSize = Mathf.RoundToInt(buttonHeight / 2.5f); // Adjust as needed for better fit
+
+float buttonX = dialogX + (dialogWidth - buttonWidth) / 2;
+
+        // Close button
+        buttonStartY += buttonHeight + buttonSpacing; // Move down for the close button
+        if (GUI.Button(new Rect(buttonX, buttonStartY, buttonWidth, buttonHeight), "Close", buttonStyle))
+        {
+            commingSoon = false;
+        }
+
+        // Additional space below the Close button
+        float extraSpace = dialogY + dialogHeight - (buttonStartY + buttonHeight + buttonSpacing);
+    
+    }
+
+
+
 
 
 
@@ -530,15 +610,35 @@ int totalCoin=1000;
 
     void ToggleSound(bool enabled)
     {
-        // Implement the logic to turn sound on or off
+        // Access the AudioSource components that handle sound effects
+        AudioSource[] soundSources = FindObjectsOfType<AudioSource>();
+
+        foreach (AudioSource source in soundSources)
+        {
+            // Check if the AudioSource is not playing music (if you have a separate tag or layer for music)
+            if (!source.CompareTag("gameManager")) 
+            {
+                source.mute = !enabled; // Mute or unmute based on the 'enabled' flag
+            }
+        }
+
         Debug.Log("Sound " + (enabled ? "Enabled" : "Disabled"));
     }
 
+
     void ToggleMusic(bool enabled)
     {
-        // Implement the logic to turn music on or off
+        // Find the AudioSource that handles the background music
+        AudioSource musicSource = GameObject.FindGameObjectWithTag("Music").GetComponent<AudioSource>();
+
+        if (musicSource != null)
+        {
+            musicSource.mute = !enabled; // Mute or unmute the music based on the 'enabled' flag
+        }
+
         Debug.Log("Music " + (enabled ? "Enabled" : "Disabled"));
     }
+
 
 
     IEnumerator IncreaseSpeedOverTime(float duration, float targetSpeed)
@@ -588,6 +688,7 @@ void Start(){
             {
                 DrawSettingsDialog();
             }
+
             if (showMenuDialog)
             {
                 OpenPlayers(currentPlayerIndex);
@@ -595,6 +696,9 @@ void Start(){
                if (showProfileDialog)
             {
                 DrawProfileDialog();
+            }
+            if(commingSoon){
+                DrawCommingDialog();
             }
         }
         playButton();
@@ -669,17 +773,71 @@ showMenuDialog=false;
         }
     }
 
-    public void EndGame()
+
+
+    public void EndGame(int goldCount,int score)
     {
-        audioSource.volume=0.5f;
+
+
+maxCoins=goldCount;
+longestRun=score/15;
+maxSurviveTime=score/10;
+highestScore=score;
+
+
+
+int savedtotalCoin = PlayerPrefs.GetInt("TotalCoin", 0);
+
+        // Check and update maxCoins
+        int savedMaxCoins = PlayerPrefs.GetInt("MaxCoins", 0); // Retrieve saved maxCoins (default 0 if not set)
+        if (maxCoins > savedMaxCoins)
+        {
+            PlayerPrefs.SetInt("MaxCoins", maxCoins); // Save the new maxCoins
+        }
+
+
+        // Check and update longestRun
+        int savedLongestRun = PlayerPrefs.GetInt("LongestRun", 0);
+        if (longestRun > savedLongestRun)
+        {
+            PlayerPrefs.SetInt("LongestRun", longestRun); // Save the new longestRun
+        }
+
+        // Check and update maxSurviveTime
+        int savedMaxSurviveTime = PlayerPrefs.GetInt("MaxSurviveTime", 0);
+        if (maxSurviveTime > savedMaxSurviveTime)
+        {
+            PlayerPrefs.SetInt("MaxSurviveTime", maxSurviveTime); // Save the new maxSurviveTime
+        }
+
+        // Check and update highestScore
+        int savedHighestScore = PlayerPrefs.GetInt("HighestScore", 0);
+        if (highestScore > savedHighestScore)
+        {
+            PlayerPrefs.SetInt("HighestScore", highestScore); // Save the new highestScore
+        }
+
+
+   
+        
+        
+PlayerPrefs.SetInt("TotalCoin", (savedtotalCoin+maxCoins));
+
+
+        // Save PlayerPrefs changes
+        PlayerPrefs.Save();
+
+        // Handle the end of the game
+        audioSource.volume = 0.5f;
         isGameRunning = false;
         isGameOver = true;
         Time.timeScale = 0; 
     }
 
+
     public void RestartGame()
     {
-        
+        Time.timeScale = 1; 
         UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name);
     }
 }

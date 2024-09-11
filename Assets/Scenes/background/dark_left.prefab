@@ -42,7 +42,6 @@ GameObject:
   - component: {fileID: 1237914300196198132}
   - component: {fileID: 6181218412723806464}
   - component: {fileID: 7489820722735984639}
-  - component: {fileID: 3395585382677657512}
   m_Layer: 0
   m_Name: Coffin01_b
   m_TagString: Untagged
@@ -115,28 +114,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &3395585382677657512
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1414548540331028459}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: 03fa21db3dcfa9a468363bd9ddba0b40, type: 3}
 --- !u!1 &3148375214612905426
 GameObject:
   m_ObjectHideFlags: 0
@@ -587,7 +564,6 @@ GameObject:
   - component: {fileID: 5980778168426625171}
   - component: {fileID: 6362857337566850153}
   - component: {fileID: 5695472070559971006}
-  - component: {fileID: 3086251804249979709}
   m_Layer: 0
   m_Name: Coffin01_a
   m_TagString: Untagged
@@ -660,28 +636,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!64 &3086251804249979709
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6634013197006410168}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 4300000, guid: c7163e2fded93b24ebf76534aa5b2dbc, type: 3}
 --- !u!1 &7109359558353316870
 GameObject:
   m_ObjectHideFlags: 0
@@ -791,7 +745,6 @@ GameObject:
   - component: {fileID: 8415711398035246273}
   - component: {fileID: 1393464866714405145}
   - component: {fileID: 8354751731285278228}
-  - component: {fileID: 1045000159003062739}
   m_Layer: 0
   m_Name: Tomb04_a
   m_TagString: Untagged
@@ -885,27 +838,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!65 &1045000159003062739
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8876922660393122881}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 5.000002, y: 0.35317758, z: 0.898485}
-  m_Center: {x: -2.5000014, y: 0, z: 0.4492425}
 --- !u!1 &9166398715397900716
 GameObject:
   m_ObjectHideFlags: 0
@@ -918,7 +850,6 @@ GameObject:
   - component: {fileID: 8269002322149326032}
   - component: {fileID: 3680612173635800301}
   - component: {fileID: 1485241868196150371}
-  - component: {fileID: 3824162790898198695}
   m_Layer: 0
   m_Name: Tomb02_d
   m_TagString: Untagged
@@ -1012,27 +943,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!65 &3824162790898198695
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9166398715397900716}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 0.5120831, y: 0.5120863, z: 1.3129507}
-  m_Center: {x: 0.0000012218952, y: -0.0000006109478, z: 0.65647537}
 --- !u!1001 &91777258302979845
 PrefabInstance:
   m_ObjectHideFlags: 0

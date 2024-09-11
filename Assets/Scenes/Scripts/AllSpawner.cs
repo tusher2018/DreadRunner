@@ -70,14 +70,20 @@ public float maxSpawnDistanceForEnvironment = 400.0f;
 
     void Start()
     {
-        playerTransform = GameObject.FindWithTag("Player").transform;
+         if(playerTransform== null){
+            GameObject playerObject=GameObject.FindWithTag("Player");
+            if(playerObject!=null){
+                  playerTransform = playerObject.transform;
         lastSpawnZ = playerTransform.position.z - initialMaxDistance;
-        spawnZ = transform.position.z;
+        spawnZ = transform.position.z;}
+        }
         
     }
 
     void Update()
     {
+
+
         if(playerTransform== null){
             GameObject playerObject=GameObject.FindWithTag("Player");
             if(playerObject==null){return;}

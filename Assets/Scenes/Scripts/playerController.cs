@@ -240,11 +240,11 @@ dialogStyle.normal.textColor=Color.white;
 
 
 
-public void AddGold(int amount)
-{
-    goldCount += amount;
-    PlaySound(goldPickingSound, false,1f);  
-}
+    public void AddGold(int amount)
+    {
+        goldCount += amount;
+        PlaySound(goldPickingSound, false,1f);  
+    }
 
 
     void HandleSlideStates()
@@ -363,69 +363,62 @@ public void AddGold(int amount)
         {
             Touch touch = Input.GetTouch(0);
 
-            switch (touch.phase)
+            // Handle swipe gestures
+            if (touch.phase == TouchPhase.Began)
             {
-                case TouchPhase.Began:
-                    isSwiping = true;
-                    startTouchPosition = touch.position;
-                    break;
+                startTouchPosition = touch.position;
+            }
+            else if (touch.phase == TouchPhase.Ended)
+            {
+                Vector2 endTouchPosition = touch.position;
+                Vector2 swipeDelta = endTouchPosition - startTouchPosition;
 
-                case TouchPhase.Moved:
-                    swipeDelta = touch.position - startTouchPosition;
-
-                    // Detect horizontal swipe (left/right)
-                    if (isSwiping && Mathf.Abs(swipeDelta.x) > Mathf.Abs(swipeDelta.y))
+                // Horizontal swipe detection (for lane change)
+                if (Mathf.Abs(swipeDelta.x) > Mathf.Abs(swipeDelta.y))
+                {
+                    if (swipeDelta.x > 0 && currentLane < 2) // Swipe Right
                     {
-                        if (swipeDelta.x > 50 && currentLane < 2)
-                        {
-                            currentLane++;
-                            targetLanePosition = (currentLane - 1) * laneOffset;
-                        }
-                        else if (swipeDelta.x < -50 && currentLane > 0)
-                        {
-                            currentLane--;
-                            targetLanePosition = (currentLane - 1) * laneOffset;
-                        }
-                        isSwiping = false;
+                        currentLane++;
+                        targetLanePosition = (currentLane - 1) * laneOffset;
                     }
-
-                    // Detect vertical swipe (up) for jumping
-                    if (isSwiping && swipeDelta.y > 50)
+                    else if (swipeDelta.x < 0 && currentLane > 0) // Swipe Left
                     {
-                        if (currentBaseState.nameHash == locoState)
+                        currentLane--;
+                        targetLanePosition = (currentLane - 1) * laneOffset;
+                    }
+                }
+                // Vertical swipe detection (for jump/slide)
+                else
+                {
+                    if (swipeDelta.y > 0) // Swipe Up (Jump)
+                    {
+                        if (currentBaseState.nameHash == locoState && !anim.IsInTransition(0))
                         {
-                            if (!anim.IsInTransition(0))
+                            if (audioSource.isPlaying && audioSource.clip == runningSound)
                             {
-                                rb.AddForce(Vector3.up * jumpPower, ForceMode.VelocityChange);
-                                anim.SetBool("Jump", true);
+                                audioSource.Stop();
                             }
+                            rb.AddForce(Vector3.up * jumpPower, ForceMode.VelocityChange);
+                            anim.SetBool("Jump", true);
+                            PlaySound(jumpingSound, false, 1f);
+                            StartCoroutine(WaitAndPlayRunningSound());
                         }
-                        isSwiping = false;
                     }
-
-                    // Detect downward swipe for sliding
-                    if (isSwiping && swipeDelta.y < -50)
+                    else if (swipeDelta.y < 0) // Swipe Down (Slide)
                     {
-                        if (currentBaseState.nameHash == locoState)
+                        if (currentBaseState.nameHash == locoState && !anim.IsInTransition(0))
                         {
-                            if (!anim.IsInTransition(0))
-                            {
-                                anim.SetBool("SlideDown", true);
-                                // Optionally adjust the collider size for the slide animation
-                                col.height = orgColHeight / 2;
-                                col.center = new Vector3(0, orgVectColCenter.y / 2, 0);
-                            }
+                            anim.SetBool("SlideDown", true);
+                            // Optionally adjust the collider size for the slide animation
+                            col.height = orgColHeight / 2;
+                            col.center = new Vector3(0, orgVectColCenter.y / 2, 0);
                         }
-                        isSwiping = false;
                     }
-                    break;
-
-                case TouchPhase.Ended:
-                    isSwiping = false;
-                    break;
+                }
             }
         }
     }
+
 
     void resetCollider()
     {
@@ -464,6 +457,6 @@ public void AddGold(int amount)
     IEnumerator WaitAndEndGame(float waitTime)
     {
         yield return new WaitForSeconds(waitTime);
-        gameManager.EndGame();
+        gameManager.EndGame(goldCount,score);
     }
 }

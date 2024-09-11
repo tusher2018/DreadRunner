@@ -96,7 +96,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff2b1ddab36b14048ba60abdb253bbd5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  destroyDistance: 100
+  player: {fileID: 0}
+  destroyDistance: 500
 --- !u!64 &3094347706160268715
 MeshCollider:
   m_ObjectHideFlags: 0

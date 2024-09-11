@@ -7,6 +7,11 @@ namespace UnityChan
         public float smooth = 3f;        // Variable for smoothing camera motion
         private Transform player;        // Reference to the player's transform
         private Vector3 offset;          // Offset distance between the camera and the player
+private Vector3 initialPosition;
+
+void Start(){
+    initialPosition=transform.position;
+}
 
    
 
@@ -19,7 +24,7 @@ namespace UnityChan
             player = playerEye.transform;
 
             // Initialize the offset based on the starting distance and direction from the player to the camera
-            offset = transform.position - player.position;
+            offset = initialPosition - player.position;
 
             // Set the camera's initial position and direction based on the offset
             transform.position = player.position + offset;
